@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<title>Modevious</title> 
+	<script type="text/javascript" src="../library.js"></script>
+	<style type="text/css">
+		body {
+			background: #FFF;
+			color: #9CF;
+			padding: 40px 0px;
+		}
+		#menu {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 10px;
+			padding: 10px 0px 15px 0px;
+			background: #000;
+			border-bottom: 5px solid #555;
+		}
+		#menu a {
+			color: #FFF;
+			margin: 0px 10px;
+			text-decoration: none;
+		}
+		#menu a:hover {
+			text-decoration: underline;
+		}
+		#update_manager {
+			width: 100%;
+		}
+		#update_manager_container {
+			padding: 10px;
+		}
+		.update {
+			padding: 0px 10px;
+			margin: 10px auto;
+		}
+		#exit {
+			float: right;
+		}
+		a#mups:hover {
+			text-decoration: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="menu">
+		<a id="exit" href="/" title="Finish">Back to website</a>
+		<a id="mups"><strong>Modevious Update System</strong></a>
+	</div>
+	<div id="update_manager">
+		<div id="update_manager_container">
+			<h1 id="progress">Checking for updates...</h1>
+		</div><!-- #update_manager_container -->
+	</div><!-- #update_manager -->
+	<script type="text/javascript">
+		$c.onLoad(function () {
+			var data, updateType;
+			$j("body").css("cursor", "progress"); // show that page is busy
+			function mups() {
+				console.log([
+					"Fetching updates for: ",
+					$c.updateName[$c.updateCounter],
+				].join(''));
+				var url = [
+					$c.updateURL[$c.updateCounter],
+					"?callback=?"
+				].join('');
+				$j.getJSON(url, function (data) {
+					if (parseInt(data.version) > $c.updateVersion[$c.updateCounter]) {
+						if (data.type == "Critical") {
+							updateType = "ui-state-error";
+						} else {
+							updateType = "ui-state-highlight";
+						}
+						// use .sub('<', '&lt;').sub('>', '&gt;') to strip characters from data
+						// received from external sources.
+						$j("#update_manager_container").append([
+						"<div class=\"update ",
+						updateType.sub('<', '&lt;').sub('>', '&gt;'),
+						"\">",
+						"<p><strong>",
+						$c.updateName[$c.updateCounter], // component name
+						"</strong> | <small>",
+						data.versionString.sub('<', '&lt;').sub('>', '&gt;'),
+						"</small></p>",
+						"<p>",
+						data.description.sub('<', '&lt;').sub('>', '&gt;'),
+						"</p>",
+						"<p><a href=\"",
+						data.url.sub('<', '&lt;').sub('>', '&gt;'),
+						"\">Download this update</a>",
+						" | <a href=\"",
+						data.changelog.sub('<', '&lt;').sub('>', '&gt;'),
+						"\">View the changelog</a></p>",
+						"</div>"
+						].join(''));
+						$c.updateFound = true;
+						console.log([
+							"Found an update for: ",
+							$c.updateName[$c.updateCounter]
+						].join(''));
+					} else {
+						console.log([
+							"No update found for: ",
+							$c.updateName[$c.updateCounter]
+						].join(''));
+					}
+					$c.updateCounter++;
+					if ($c.updateCounter >= $c.updateURL.length) {
+						if ($c.updateFound) {
+							$j("#progress").hide("blind");
+						} else {
+							$j("#progress").html("Everything is up-to-date!");
+						}
+						$j("body").css("cursor", "auto"); // change cursor back
+					} else {
+						mups();
+					}
+				});
+			}
+			mups();
+		});
+	</script>
+</body>
+</html>
