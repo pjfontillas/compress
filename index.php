@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Apps : Compress</title>
+    <title>Compress</title>
 
 <?php
 $resourcesPath = 'Resources/';
@@ -48,14 +48,14 @@ include $resourcesPath.'footer.php';
     // global variables
     var clip;
 
-    $j.validator.addMethod("complete_url", function(val, elem) {
+    $.validator.addMethod("complete_url", function(val, elem) {
             // if no url, don't do anything
             if (val.length == 0) { return true; }
 
             // if user has not entered http:// https:// or ftp:// assume they mean http://
             if(!/^(https?|ftp):\/\//i.test(val)) {
                     val = 'http://'+val; // set both the value
-                    $j(elem).val(val); // also update the form element
+                    $(elem).val(val); // also update the form element
             }
             // now check if valid url
             // http://docs.jquery.com/Plugins/Validation/Methods/url
@@ -63,16 +63,16 @@ include $resourcesPath.'footer.php';
             return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(val);
     }, 'You must enter a valid URL');
 
-    $j("#results_header, #error_list").hide();
-    $j("#compress_form-source").val("ajax");
-    $j("#compress_form").validate({
+    $("#results_header, #error_list").hide();
+    $("#compress_form-source").val("ajax");
+    $("#compress_form").validate({
         errorLabelContainer: "#error_list",
         wrapper: "li",
         rules: {
                 url: "complete_url"
         }
     });
-    var obj = $j("#compress_form-url");
+    var obj = $("#compress_form-url");
     obj.focus(function () {
         if (obj.val() == "Shorten Links Here") {
             obj.val('');
@@ -102,27 +102,27 @@ include $resourcesPath.'footer.php';
             "<h5 class=\"long_links\"><a href=\"", long_link, "\" title=\"Long link - ", long_link, "\">", long_link, "</a></h5>"
         ].join('');
     }
-    $j("#compress_form").submit(function (event) {
+    $("#compress_form").submit(function (event) {
         event.preventDefault();
-        if ($j("#compress_form").valid()) {
-            if ($j("#compress_form-url").val().include("l1n.cc")) {
-                $j.pnotify({
+        if ($("#compress_form").valid()) {
+            if ($("#compress_form-url").val().include("l1n.cc")) {
+                $.pnotify({
                     pnotify_title: "Error",
                     pnotify_text: "That link is already compressed!"
                 });
             } else {
-                $j("#compress_form-url, #compress_form button").attr("disabled", "disabled");
-                $j.post("url_shortener.php", {
-                        "url": $j("#compress_form-url").val(),
-                        "source": $j("#compress_form-source").val()
+                $("#compress_form-url, #compress_form button").attr("disabled", "disabled");
+                $.post("url_shortener.php", {
+                        "url": $("#compress_form-url").val(),
+                        "source": $("#compress_form-source").val()
                     },
                     function (data) {
                         clip.reposition();
-                        $j("#results_header").show();
-                        $j("#results").prepend(shortened_link_template(data) + copy_link_template(data) + long_link_template($j("#compress_form-url").val()));
-                        $j("#results h5:nth-child(1), #results h5:nth-child(2), #results h5:nth-child(3)").hide().show("clip", 200).effect("highlight", 5000);
-                        $j(".copy_links a").mouseenter(function (event) {
-                            clip.setText($j(this).attr("href"));
+                        $("#results_header").show();
+                        $("#results").prepend(shortened_link_template(data) + copy_link_template(data) + long_link_template($("#compress_form-url").val()));
+                        $("#results h5:nth-child(1), #results h5:nth-child(2), #results h5:nth-child(3)").hide().show("clip", 200).effect("highlight", 5000);
+                        $(".copy_links a").mouseenter(function (event) {
+                            clip.setText($(this).attr("href"));
                             if (clip.div) {
                                 clip.receiveEvent("mouseout", null);
                                 clip.reposition(this);
@@ -131,20 +131,20 @@ include $resourcesPath.'footer.php';
                             }
                             clip.receiveEvent("click", null);
                         });
-                        $j("#compress_form-url").val("http://l1n.cc/" + data);
-                        $j("#compress_form-url, #compress_form button").removeAttr("disabled");
+                        $("#compress_form-url").val("http://l1n.cc/" + data);
+                        $("#compress_form-url, #compress_form button").removeAttr("disabled");
                     }
                 );
             }
         } else {
-            $j("#error_list").show();
+            $("#error_list").show();
         }
     });
-    $j(document).ready(function () {
+    $(document).ready(function () {
         ZeroClipboard.setMoviePath("http://pjfontillas.com/apps/compress/zeroclipboard/ZeroClipboard.swf");
         clip = new ZeroClipboard.Client();
         clip.addEventListener("onMouseDown", function () {
-            $j.pnotify({
+            $.pnotify({
                 pnotify_title: "Success!",
                 pnotify_text: "Copied URL to clipboard"
             });

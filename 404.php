@@ -21,12 +21,17 @@ include $resourcesPath.'header.php';
 #message_404 h1 {
     color: RED;
 }
+body {
+    background-color: BLACK;
+}
 </style>
 </head>
 <body>
 <div id="message_404">
     <h1>404</h1>
-    <p>Sorry, we couldn't find what you were looking for. <?php echo $_SERVER['HTTP_REFERER']; ?></p>
+    <h3>Sorry, we couldn't find what you were looking for.</h3>
+    <p>It looks like you came from: <?php echo $_SERVER['HTTP_REFERER']; ?></p>
+    <p>Maybe they have a wrong or outdated link.</p>
 </div><!-- #404_message -->
 
 <?php
