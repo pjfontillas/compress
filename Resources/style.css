@@ -53,3 +53,8 @@ body {
 .error {
     color: red;
 }
+.horizontal_ad {
+  text-align: center;
+  width: 728px;
+  margin: 0px auto;
+}

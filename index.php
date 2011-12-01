@@ -35,9 +35,8 @@ google_ad_width = 728;
 google_ad_height = 90;
 //-->
 </script>
-<div class="text-center">
-<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+<div class="horizontal_ad">
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 </div>
 
 <?php
