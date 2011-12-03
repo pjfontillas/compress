@@ -23,21 +23,14 @@ var Core = (function () {
      *    Returns this library's current version as an integer.
      */
     getVersion: function () {
-      return version;
+      return this.version;
     },
     /**
      *  getVersionString ()
      *    Returns version string.
      */
     getVersionString: function () {
-      return versionString;
-    },
-    /**
-     *  changePage (String, Element)
-     *    Updates <objectID>'s innerHTML with content from <pageName>.
-     */
-    changePage: function (pageName, objectID) {
-      this.fetchData(pageName, null, objectID);
+      return this.versionString;
     },
     /**
      *  createCookie (String, String, Int)
@@ -49,7 +42,8 @@ var Core = (function () {
       if (days) {
         date.setTime(date.getTime() + (days *  24 *  60 *  60 *  1000));
         expires = ["; expires=", date.toGMTString()].join('');
-      } else {
+      }
+      else {
         expires = '';
       }
       document.cookie = [name, '=', value, expires, "; path=/"].join('');
@@ -73,7 +67,7 @@ var Core = (function () {
       return null;
     },
     getCookie: function (name) {
-      readCookie(name);
+      this.readCookie(name);
     },
     /**
      *  eraseCookie (String)
@@ -84,17 +78,6 @@ var Core = (function () {
     },
     deleteCookie: function (name) {
       this.eraseCookie(name);
-    },
-    /**
-     *  onLoad(Function)
-     *    Similar to the onLoad HTML attribute, onLoad() runs the specified
-     *    function after the page is done loading.
-     */
-    addLoadEvent: function (func) {
-      $("document").ready(func);
-    },
-    onLoad: function (func) {
-      this.addLoadEvent(func);
     },
     /**
      *  getUrlVariable (String)
@@ -116,18 +99,14 @@ var Core = (function () {
             }
             return null;
     },
-    getURLVariable: function (URLVariable) {
-      return this.getUrlVariable(URLVariable);
-    },
     /**
      *  showEmail ()
      *    De-obfuscate any email address on the page, replacing the link content
      *    as well as the href attribute.
      */
     showEmail: function () {
-      var url;
       $(".enc_email").each(function (a) {
-        url = a.href.replace(this.config.at, '@');
+        var url = a.href.replace(this.config.at, '@');
         url = url.replace(this.config.dot, '.');
         a.href = url;
         url = url.replace("mailto:", '');
@@ -135,67 +114,11 @@ var Core = (function () {
       }.bind(this));
     },
     /**
-     *  getTime ()
-     *    Returns time in HH:MM AM/PM format.
-     */
-    getTime: function () {
-      var a_p = "";
-      var d = new Date();
-      var curr_hour = d.getHours();
-      if (curr_hour < 12) {
-        a_p = "AM";
-      } else {
-        a_p = "PM";
-      }
-      if (curr_hour === 0) {
-        curr_hour = 12;
-      }
-      if (curr_hour > 12) {
-        curr_hour = curr_hour - 12;
-      }
-      var curr_min = d.getMinutes();
-      curr_min = [
-        curr_min,
-        ''
-      ].join('');
-      if (curr_min < 10) {
-        curr_min = [
-          '0',
-          curr_min
-        ].join('');
-      }
-      var curr_s = d.getSeconds();
-      if (curr_s < 10) {
-        curr_s = [
-          '0',
-          curr_s
-        ].join('');
-      }
-      var curr_ms = d.getMilliseconds();
-      if (curr_ms < 100) {
-        curr_ms = [
-          '0',
-          curr_ms
-        ].join('');
-      }
-      return [
-        curr_hour,
-        ':',
-        curr_min,
-        ':',
-        curr_s,
-        ':',
-        curr_ms,
-        a_p
-      ].join('');
-    },
-    /**
      *  getFileType (String)
      *    Returns the extension for a file/link/url.
      */
     getFileType: function (file) {
-      var extArray = [];
-      extArray = file.split('.'); // Store extension in last element of array
+      var extArray = file.split('.'); // Store extension in last element of array
       return extArray[extArray.length - 1];
     },
     /**
@@ -203,121 +126,8 @@ var Core = (function () {
      *    Returns the name for a file/link/url.
      */
     getFileName: function (file) {
-      var fileArray = [];
-      fileArray = file.split('/'); // Store name in the last element of array
+      var fileArray = file.split('/'); // Store name in the last element of array
       return fileArray[fileArray.length - 1];
-    },
-    /**
-     *  vAlign ()
-     *    Vertically aligns an element relative to their parent element. The
-     *    element may not have any top or bottom margins, but may be horizontally
-     *    aligned (centered) using "margin: 0px auto;". Using "margin: 50px auto;"
-     *    will produce errors, and you should not be setting a margin for
-     *    top/bottom anyways since you will are vertically aligning the element!
-     *    If an element also has the class "centered" then align it horizontally
-     *    as well.
-     */
-    vAlign: function () {
-      var parentHeight;
-      var thisHeight;
-      var newTop;
-      var parentWidth;
-      var thisWidth;
-      var newLeft;
-      // align most elements to their parent element
-      $(".vAlign").each(function(){
-        // get parent height - get element height
-        // get difference and set as new top
-        parentHeight = $(this).parent().outerHeight(true);
-        thisHeight = $(this).outerHeight(true);
-        // get the new top positioning but split the free space in half
-        newTop = (parentHeight - thisHeight) / 2;
-        // if element is larger than parent somehow (ie element vs browser
-        //  window) reset newTop to 0 to prevent pushing the element off-screen.
-        if (newTop < 1) {
-          newTop = 0;
-        }
-        // set style
-        $(this).css({
-          "position": "relative",
-          "top": [newTop, "px"].join('')
-        });
-      });
-      // some elements should be aligned with the browser window
-      $(".vAlignWindow").each(function(){
-        // get browser height - get element height
-        parentHeight = document.viewport.getHeight();
-        thisHeight = $(this).outerHeight(true);
-        newTop = (parentHeight - thisHeight) / 2;
-        if (newTop < 1) {
-          newTop = 0;
-        }
-        $(this).css({
-          "position": "fixed",
-          "top": [newTop, "px"].join('')
-        });
-        if ($(this).hasClass("centered")) {
-          parentWidth = document.viewport.getWidth();
-          thisWidth = $(this).outerWidth(true);
-          newLeft = (parentWidth - thisWidth) / 2;
-          if (newLeft < 1) {
-            newLeft = 0;
-          }
-          $(this).css({
-            "left": [newLeft, "px"].join('')
-          });
-        }
-      });
-    },
-    /**
-     *  vAlignThis (element)
-     *    Vertically aligns a single element. If they also have the class centered
-     *    then align it horizontally as well. Only align the element that is sent
-     *    assuming we passed a jQuery element/object
-     */
-    vAlignThis: function (element) {
-      var parentHeight;
-      var thisHeight;
-      var newTop;
-      var parentWidth;
-      var thisWidth;
-      var newLeft;
-      if (element.hasClass("vAlignWindow")) {
-        parentHeight = document.viewport.getHeight();
-        thisHeight = element.outerHeight(true);
-        newTop = (parentHeight - thisHeight) / 2;
-        if (newTop < 1) {
-          newTop = 0;
-        }
-        element.css({
-          'position': 'fixed',
-          'top': newTop + 'px'
-        });
-        if (element.hasClass('centered')) {
-          //alert('single element centered to browser');
-          parentWidth = document.viewport.getWidth();
-          thisWidth = element.outerWidth(true);
-          newLeft = (parentWidth - thisWidth) / 2;
-          if (newLeft < 1) {
-            newLeft = 0;
-          }
-          element.css({
-            "left": [newLeft, "px"].join('')
-          });
-        }
-      } else {
-        parentHeight = element.parent().outerHeight(true);
-        thisHeight = element.outerHeight(true);
-        newTop = (parentHeight - thisHeight) / 2;
-        if (newTop < 1) {
-          newTop = 0;
-        }
-        // set style
-        element.css({
-          "position": "relative",
-          "top": [newTop, "px"].join('')
-        });
-      }
     },
     /**
      *  setStyleSheet (title)
@@ -356,7 +166,7 @@ var Core = (function () {
      *    IE, as usual, behaves differently than other browsers.
      */
     getFlashMovie: function (movieName) {
-      var isIE = navigator.appName.indexOf("Microsoft") != -1;
+      var isIE = navigator.appName.indexOf("Microsoft") !== -1;
       return (isIE) ? window[movieName] : document[movieName];
     }
   };
@@ -572,7 +382,7 @@ if (typeof(console) === 'undefined' || $c.config.debug) {
     }
   }
 }
-
+//*
 // by the time the document loads the Sound Manager div is already available
 $(document).ready(function() {
   // only need to do if sound manager even exists
@@ -592,6 +402,7 @@ $(document).ready(function() {
     setTimeout(fixSoundManagerPosition, 250);
   }
 });
+//*/
 
 var stack_topleft = {"dir1": "down", "dir2": "right", "firstpos1": 15, "firstpos2": 15};
 var stack_bottomleft = {"dir1": "up", "dir2": "right", "firstpos1": 15, "firstpos2": 15};
@@ -652,7 +463,7 @@ $(document).ready(function() {
     autoHeight: false,
     collapsible: true
   });
-  $(":button, .button").button();
+  $(":button, .button, input[type=button]").button();
   $(".buttonset").buttonset();
   $(".draggable").draggable({
     cursor: "move",
@@ -660,16 +471,6 @@ $(document).ready(function() {
   });
   $(".resizable").resizable();
   console.log("jQuery User Interface initialized.");
-
-  // initialize Expose elements
-  $(".expose").click(function(){
-    $(this).expose({
-      api: true,
-      closeOnEsc: false,
-      zIndex: 10001
-    }).load();
-  });
-  console.log("Expose elements initialized.");
 
   // initialize AutoMouseOver elements
   $(".mouse-over").autoMouseOver();
@@ -690,18 +491,6 @@ $(document).ready(function() {
   }
   console.log("Modevious started and running smoothly!");
 
-  // Automatically initialize $c.vAlign
-  var bindVAlign = function(){
-    console.log("Window has been resized");
-    $(window).unbind("resize", bindVAlign);
-    $c.vAlign();
-    setTimeout(function () {
-      $(window).bind("resize", bindVAlign);
-      $c.vAlign();
-    }, 250); // 250 ms
-  }
-  $(window).bind("resize", bindVAlign);
-
   // After 10 seconds check for Sound Manager, if it fails notify the user and check again in 10 seconds
   setTimeout(function () {
     if (!soundManager.ok()) {
@@ -710,6 +499,25 @@ $(document).ready(function() {
         pnotify_text: "Failed to load. Please check that you have Flash installed and that it is not being blocked by a plugin."
       });
       console.log("Sound Manager check after 10 seconds has returned false.");
+            
+      // move SoundManager Flash object to somewhere visible
+      console.log("SoundManager might be blocked by Flash block. Trying to move it to somewhere visisble.");
+      if (soundManager !== null) {
+        function fixSoundManagerPosition() {
+          var soundManagerDiv = $("#sm2-container");
+          if (soundManagerDiv === null) {
+            setTimeout(fixSoundManagerPosition, 250);
+          } else {
+            $("#sm2-container").css({
+              "position": "absolute",
+              "top": "0px",
+              "right": "0px"
+            });
+          }   
+        };
+        setTimeout(fixSoundManagerPosition, 250);
+      }
+      
       setTimeout(function () {
         if (soundManager.ok()) { // false alarm, let the user know that Sound Manager did load correctly
           $.pnotify({
