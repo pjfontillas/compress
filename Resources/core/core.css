@@ -175,6 +175,10 @@
   display: none !important;
 }
 
+.ui-pnotify-history-container {
+  display: none !important;
+}
+
 .clearfix:after {
   content: ".";
   display: block;
