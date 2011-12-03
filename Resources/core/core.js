@@ -499,7 +499,7 @@ $(document).ready(function() {
         pnotify_text: "Failed to load. Please check that you have Flash installed and that it is not being blocked by a plugin."
       });
       console.log("Sound Manager check after 10 seconds has returned false.");
-
+            
       // move SoundManager Flash object to somewhere visible
       console.log("SoundManager might be blocked by Flash block. Trying to move it to somewhere visisble.");
       if (soundManager !== null) {
@@ -517,7 +517,7 @@ $(document).ready(function() {
         };
         setTimeout(fixSoundManagerPosition, 250);
       }
-
+      
       setTimeout(function () {
         if (soundManager.ok()) { // false alarm, let the user know that Sound Manager did load correctly
           $.pnotify({
