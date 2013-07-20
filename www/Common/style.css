@@ -4,7 +4,7 @@
 #compress_container {
     width: 700px;
     padding: 20px;
-    margin: 50px auto;
+    margin: 10px auto;
     background: #f5f5f5;
     border: 1px solid #777;
     color: #000;
@@ -33,16 +33,17 @@ body {
     float: left;
     display: block;
     overflow: hidden;
-    margin: 5px 0px;
+    margin: 5px 20px 5px 0;
 }
 .shortened_links {
     width: 150px;
+    text-overflow: ellipsis;
 }
 .long_links {
     width: 350px;
 }
 .copy_links {
-    width: 200px;
+    width: 100px;
 }
 #results a {
     text-decoration: none;

@@ -1,12 +1,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <link type="text/css" href="<?php echo $resourcesPath; ?>style.css" rel="stylesheet" title="default" />
-    <link type="text/css" href="<?php echo $resourcesPath; ?>print.css" rel="stylesheet" title="print" />
-    <link type="text/css" href="<?php echo $resourcesPath; ?>mobile.css" rel="stylesheet" title="mobile" />
+    <link type="text/css" href="<?php echo $commonPath; ?>style.css" rel="stylesheet" title="default" />
+    <link type="text/css" href="<?php echo $commonPath; ?>print.css" rel="stylesheet" title="print" />
+    <link type="text/css" href="<?php echo $commonPath; ?>mobile.css" rel="stylesheet" title="mobile" />
 
-    <link type="image/vnd.microsoft.icon" href="<?php echo $resourcesPath; ?>favicon.ico" rel="icon" />
+    <link type="image/vnd.microsoft.icon" href="<?php echo $commonPath; ?>images/favicon.ico" rel="icon" />
 
-    <script type="text/javascript" src="<?php echo $resourcesPath; ?>favicon.js"></script>
+    <script type="text/javascript" src="<?php echo $resourcesPath; ?>favicon/favicon.js"></script>
 
     <script type="text/javascript" src="<?php echo $resourcesPath; ?>jquery/jquery-1.7.min.js"></script>
 

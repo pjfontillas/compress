@@ -5,13 +5,11 @@
  * Uses SQLite
  */
 
-ini_set('display_errors', '1'); 
-ini_set('log_errors', '1'); 
-error_reporting(E_ALL);
- 
+include('config.php');
+
 function generate_random_string($length) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-    $string = '';    
+    $string = '';
     for ($p = 0; $p < $length; $p++) {
         $string .= $characters[mt_rand(0, strlen($characters) - 1)];
     }
@@ -24,11 +22,11 @@ function clean_input($input) {
     return $input;
 }
 
-// check isset $_POST and $_GET for url = $URL
+// check isset $_POST and $_GET for url = $full_url
 if (isset($_POST['url'])){
-    $URL = clean_input($_POST['url']);
+    $full_url = clean_input($_POST['url']);
 } else if (isset($_GET['url'])) {
-    $URL = clean_input($_GET['url']);
+    $full_url = clean_input($_GET['url']);
 } else {
     die('URL is not set.');
 }
@@ -44,8 +42,8 @@ if (isset($_POST['source'])) {
 
 try {
   // open the database
-  $database = new SQLiteDatabase('kDhdsKowm.sqlite', 0666, $error);
-} catch (Exception $e) {
+  $database = new SQLiteDatabase($config['db'], 0766, $error);
+} catch (Exception $error) {
   die($error);
 }
 
@@ -55,23 +53,26 @@ $length = 5;
 
 while ($searching) {
     // create url using algo
-    $shortened_URL = generate_random_string($length);
+    $short_url = generate_random_string($length);
 
     // check against DB
     $query = 'SELECT * FROM links' .
-                     ' WHERE shortened_URL="' . $shortened_URL . '"';
-    if ($result = $database->query($query, SQLITE_BOTH, $error)) {
+             " WHERE short_url='${short_url}'";
+    $result = $database->query($query, SQLITE_BOTH, $error);
+    if ($result) {
         if (sizeof($result) == 0) {
             // if not found, write pair to DB
             $query =
-                'INSERT INTO links (URL, shortened_URL) ' .
-                "VALUES ('$URL', '$shortened_URL');";
-            if (!$database->queryExec($query, $error)) {
+                'INSERT INTO links (full_url, short_url) ' .
+                "VALUES ('${full_url}', '${short_url}');";
+            $result = $database->query($query, SQLITE_BOTH, $error);
+            if ($error) {
                 die($error);
             }
             $searching = false;
         } else {
-            if ($limit-- == 0) {
+            $limit--;
+            if ($limit === 0) {
                 $limit = 1000;
                 $length++;
             }
@@ -81,23 +82,25 @@ while ($searching) {
     }
 }
 
+$short_url = $config['domain'].'/'.$short_url;
+
 // if ajax return the shortened url string
-if ($source == "ajax") {
-    echo($shortened_URL);
+if ($source === 'ajax') {
+    echo $short_url;
 }
 // if html return web page
-if ($source == "html") {
-    echo(
-    '<!DOCTYPE html>' .
-    '<html>' .
-    '<head>' .
-    '<title>Shortened URL</title>' .
-    '</head>' .
-    '<body>' .
-    '<h1>Success!</h1>' .
-    "<p>Here is your shortened URL: $shortened_URL" .
-    '</body>' .
-    '</html>'
-    );
+if ($source === 'html') {
+    echo <<<HTML
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Shortened URL</title>
+    </head>
+    <body>
+    <h1>Success!</h1>
+    <p>Here is your shortened URL: <a href="${short_url}" alt="${full_url}">${short_url}</a></p>
+    </body>
+    </html>
+HTML;
 }
 ?>
