@@ -8,11 +8,11 @@ try {
     die($error);
 }
 //add links table to database
-$query = 'SELECT * FROM links';
+$query = 'SELECT * FROM redirects';
 $result = $database->query($query, SQLITE_BOTH, $error);
 if ($result) {
     while ($row = $result->fetch()) {
-        print("<p>${row['short_url']} => ${row['full_url']}</p>");
+        print("<p>${row['short_url']} | IP: ${row['ip']} | FORWARDED FOR: ${row['proxy']} | TIME: ${row['time']}</p>");
     }
 } else {
     die($error);

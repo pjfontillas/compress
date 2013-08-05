@@ -17,8 +17,21 @@ $query = 'SELECT * FROM links' .
 $result = $database->query($query, SQLITE_BOTH, $error);
 if ($result) {
 
+    // there will only be one match
     while ($row = $result->fetch()) {
-        // there will only be one match
+        // add record of redirect
+        $time = time();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $proxy = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        $query =
+                'INSERT INTO redirects (short_url, ip, proxy, time)' .
+                "VALUES ('${code}', '${ip}', '${proxy}', '${time}');";
+        $result = $database->query($query, SQLITE_BOTH, $error);
+        if ($error) {
+            die($error);
+        }
+
+        // redirect
         header("HTTP/1.1 301 Moved Permanently");
         header('Location: ' . $row['full_url']);
     }

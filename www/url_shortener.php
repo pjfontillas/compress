@@ -16,12 +16,6 @@ function generate_random_string($length) {
     return $string;
 }
 
-function clean_input($input) {
-    $input = str_replace(array('\\','\''), array('\\\\','\\\''), $input);
-    $input = htmlentities($input);
-    return $input;
-}
-
 // check isset $_POST and $_GET for url = $full_url
 if (isset($_POST['url'])){
     $full_url = clean_input($_POST['url']);
