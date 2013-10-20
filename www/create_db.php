@@ -3,7 +3,9 @@ include('config.php');
 
 try {
     //create or open the database
-    $database = new SQLiteDatabase($config['db'], 0766, $error);
+    $database = new PDO($config['db']);
+    // Set errormode to exceptions
+    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $error) {
     die($error);
 }
