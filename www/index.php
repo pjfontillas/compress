@@ -9,12 +9,6 @@ $resourcesPath = 'Resources/';
 include $commonPath.'header.php';
 ?>
 
-<script type="text/javascript">
-if (location.href.indexOf('cmprss.us') !== -1) {
-    location.href = 'http://compress.pjfontillas.localhost';
-}
-</script>
-
 <script type="text/javascript" src="urls.js"></script>
 <script type="text/javascript" src="bookmarks.js"></script>
 
