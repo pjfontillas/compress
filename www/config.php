@@ -2,7 +2,7 @@
 
 $config = array(
     'domain' => 'http://cmprss.us',
-    'db' => 'db/kDhdsKowm.sqlite'
+    'db' => 'sqlite:db/kDhdsKowm.sqlite'
 );
 
 ini_set('display_errors', '1');
