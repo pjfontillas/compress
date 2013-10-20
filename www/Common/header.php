@@ -8,10 +8,10 @@
 
     <script type="text/javascript" src="<?php echo $resourcesPath; ?>favicon/favicon.js"></script>
 
-    <script type="text/javascript" src="<?php echo $resourcesPath; ?>jquery/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="<?php echo $resourcesPath; ?>jquery/jquery-1.9.1.js"></script>
 
-    <script type="text/javascript" src="<?php echo $resourcesPath; ?>jquery/jquery-ui/jquery-ui-1.8.16.min.js"></script>
-    <link type="text/css" href="<?php echo $resourcesPath; ?>jquery/jquery-ui/css/ui-lightness/jquery-ui-1.8.16.css" rel="stylesheet" />
+    <script type="text/javascript" src="<?php echo $resourcesPath; ?>jquery/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
+    <link type="text/css" href="<?php echo $resourcesPath; ?>jquery/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
 
     <script type="text/javascript" src="<?php echo $resourcesPath; ?>jquery/autoMouseOver/jquery.autoMouseOver.min.js"></script>
 
