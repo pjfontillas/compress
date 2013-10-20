@@ -42,7 +42,7 @@ desktop.ini
 # Custom files #
 ################
 .ftpquota
-.htaccess
+#.htaccess
 cgi-bin
 build/
 tmp/
