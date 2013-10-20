@@ -12,7 +12,7 @@ try {
 // add links table to database
 $query = 'CREATE TABLE links ' .
         '(full_url TEXT, short_url TEXT);';
-if (!$database->queryExec($query, $error)) {
+if (!$database->exec($query, $error)) {
     echo "<p>${error}</p>";
 } else {
     echo '<p>Successfully created \'links\' table.</p>';
