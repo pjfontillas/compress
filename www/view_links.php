@@ -3,19 +3,24 @@
 include('config.php');
 
 try {
-    $database = new SQLiteDatabase($config['db'], 0666, $error);
+    // open the database
+    $database = new PDO($config['db']);
+    // Set errormode to exceptions
+    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $error) {
     die($error);
 }
 //add links table to database
 $query = 'SELECT * FROM links';
-$result = $database->query($query, SQLITE_BOTH, $error);
-if ($result) {
-    while ($row = $result->fetch()) {
-        print("<p>${row['short_url']} => ${row['full_url']}</p>");
-    }
-} else {
+try {
+    $result = $database->query($query);
+} catch (Exception $error) {
     die($error);
 }
+
+foreach ($result as $row) {
+    print("<p>${row['short_url']} => ${row['full_url']}</p>");
+}
+
 unset($database);
 ?>

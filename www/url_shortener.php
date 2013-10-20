@@ -36,7 +36,9 @@ if (isset($_POST['source'])) {
 
 try {
   // open the database
-  $database = new SQLiteDatabase($config['db'], 0766, $error);
+    $database = new PDO($config['db']);
+    // Set errormode to exceptions
+    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $error) {
   die($error);
 }
@@ -52,27 +54,29 @@ while ($searching) {
     // check against DB
     $query = 'SELECT * FROM links' .
              " WHERE short_url='${short_url}'";
-    $result = $database->query($query, SQLITE_BOTH, $error);
-    if ($result) {
-        if (sizeof($result) == 0) {
-            // if not found, write pair to DB
-            $query =
-                'INSERT INTO links (full_url, short_url) ' .
-                "VALUES ('${full_url}', '${short_url}');";
-            $result = $database->query($query, SQLITE_BOTH, $error);
-            if ($error) {
-                die($error);
-            }
-            $searching = false;
-        } else {
-            $limit--;
-            if ($limit === 0) {
-                $limit = 1000;
-                $length++;
-            }
-        }
-    } else {
+    try {
+        $result = $database->query($query);
+    } catch (Exception $error) {
         die($error);
+    }
+    
+    if ($result->rowCount() == 0) {
+        // if not found, write pair to DB
+        $query =
+            'INSERT INTO links (full_url, short_url) ' .
+            "VALUES ('${full_url}', '${short_url}');";
+        try {
+            $result = $database->query($query);
+        } catch (Exception $error) {
+            die($error);
+        }
+        $searching = false;
+    } else {
+        $limit--;
+        if ($limit === 0) {
+            $limit = 1000;
+            $length++;
+        }
     }
 }
 
